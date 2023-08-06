@@ -146,9 +146,28 @@
          document.getElementById('subtotal').innerText = subtotal;
          document.getElementById('totalPrice').innerText = subtotal + text;
        }
+       
+       
+         const inputValue=document.getElementById('firstQuantity');
+         inputValue.addEventListener("keyup", function(){
+         addQuantity('firstQuantity');
+         const quantity =minusQuantity('firstQuantity')
+         if (quantity>=0){
+            price =totalPhonePrice('iphonePrice',1219,quantity);
+            subtotal('casePrice',price);
+         }
+            });
 
+         const inputValue2=document.getElementById('secondQuantity');
+         inputValue2.addEventListener("keyup", function(){
+         addQuantity('secondQuantity');
+         const quantity =minusQuantity('secondQuantity')
+         if (quantity>=0){
+            price =totalPhonePrice('casePrice',59,quantity);
+            subtotal('iphonePrice',price);
+         }
+            });
 
-         
    </script>
 
 
