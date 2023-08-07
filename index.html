@@ -25,11 +25,11 @@
 
                      <div class="col-md-5 center-item">
                         <div class="input-group number-spinner">
-                           <button id="firstMinusBtn" class="btn btn-default"><i class="fas fa-minus"></i></button>
-                           <input type="text" id="firstQuantity" class="form-control text-center" value="1">
-                           <button id="firstPlusBtn" class="btn btn-default"><i class="fas fa-plus"></i></button>
+                           <button id="phoneMinusBtn" class="btn btn-default"><i class="fas fa-minus"></i></button>
+                           <input type="text" id="phoneQuantity" class="form-control text-center" value="1">
+                           <button id="phonePlusBtn" class="btn btn-default"><i class="fas fa-plus"></i></button>
                         </div>
-                        <h5>$<span id="iphonePrice">1219</span></h5>
+                        <h5>$<span id="iphoneTotalPrice">1219</span></h5>
                         <img src="images/remove.png" alt="" class="remove-item">
                      </div>
                   </div>
@@ -43,9 +43,9 @@
                      </div>
                      <div class="col-md-5 center-item">
                         <div class="input-group number-spinner">
-                           <button id="secondMinusBtn" class="btn btn-default"><i class="fas fa-minus"></i></button>
-                           <input type="text" id="secondQuantity" class="form-control text-center" value="1">
-                           <button id="secondPlusBtn" class="btn btn-default"><i class="fas fa-plus"></i></button>
+                           <button id="caseMinusBtn" class="btn btn-default"><i class="fas fa-minus"></i></button>
+                           <input type="text" id="caseQuantity" class="form-control text-center" value="1">
+                           <button id="casePlusBtn" class="btn btn-default"><i class="fas fa-plus"></i></button>
 
                         </div>
                         <h5>$<span id="casePrice">59</span</h5>
@@ -79,59 +79,56 @@
    </section>
 
    <script>
-      const firstPlusBTn=document.getElementById('firstPlusBtn');
-      firstPlusBTn.addEventListener("click", function(){
-         const quantity =addQuantity('firstQuantity');
-         if (quantity>=0){
-            price =totalPhonePrice('iphonePrice',1219,quantity);
-            subtotal('casePrice',price);
-         }
+      const phonePlusBtn=document.getElementById('phonePlusBtn');
+      phonePlusBtn.addEventListener("click", function(){
+         const quantity =changeQuantity('phoneQuantity' , true, true);
+          setTotalPrice('iphoneTotalPrice','casePrice',1219,quantity);
+
       });
 
-      const firstMinusBTn=document.getElementById('firstMinusBtn');
-      firstMinusBTn.addEventListener("click", function(){
-         const quantity = minusQuantity('firstQuantity');
-         if (quantity>=0){
-            price =totalPhonePrice('iphonePrice',1219,quantity);
-            subtotal('casePrice',price);
-         }
+      const phoneMinusBtn=document.getElementById('phoneMinusBtn');
+      phoneMinusBtn.addEventListener("click", function(){
+         const quantity = changeQuantity('phoneQuantity' , false, true);
+         setTotalPrice('iphoneTotalPrice','casePrice',1219,quantity);
       });
 
-
-      const secondPlusBTn=document.getElementById('secondPlusBtn');
-      secondPlusBTn.addEventListener("click", function(){
-         const quantity =addQuantity('secondQuantity');
-         if (quantity>=0){
-            price =totalPhonePrice('casePrice',59,quantity);
-            subtotal('iphonePrice',price);
+      function setTotalPrice(id,otherProductId,price,quantity){
+            if (quantity>=0){
+            ProductPrice =totalPhonePrice(id,price,quantity);
+            subtotal(otherProductId,ProductPrice);
          }
-      });
+      }
 
-      const secondMinusBTn=document.getElementById('secondMinusBtn');
-      secondMinusBTn.addEventListener("click", function(){
-         const quantity = minusQuantity('secondQuantity');
-         if (quantity>=0){
-            price =totalPhonePrice('casePrice',59,quantity);
-            subtotal('iphonePrice',price);
-         }
-      });
-
-
-       function addQuantity(id){ 
+      function changeQuantity(id , isPositive, isChange){
          const value = document.getElementById(id).value;
-         const valueNumber = parseFloat(value);
-         const finalNumber = valueNumber+1;
+         const valueNumber = parseInt(value);
+         let finalNumber;
+         if (isPositive == true && isChange == true){
+             finalNumber = valueNumber+1;
+         }
+         else if (isPositive == false && isChange == true){
+             finalNumber = valueNumber-1;
+         }
+         else if (isPositive == true && isChange == false || isPositive == false && isChange == false  )
+         {
+          finalNumber = valueNumber;
+         }
          document.getElementById(id).value = finalNumber;;
          return finalNumber;
-       }
+      }
 
-       function minusQuantity(id){ 
-         const value = document.getElementById(id).value;
-         const valueNumber = parseFloat(value);
-         const finalNumber = valueNumber-1;
-         document.getElementById(id).value = finalNumber;;
-         return finalNumber;
-       }
+
+      const casePlusBtn=document.getElementById('casePlusBtn');
+      casePlusBtn.addEventListener("click", function(){
+         const quantity =changeQuantity('caseQuantity' , true, true);
+          setTotalPrice('casePrice','iphoneTotalPrice',59,quantity);
+      });                         
+
+      const caseMinusBtn=document.getElementById('caseMinusBtn');
+      caseMinusBtn.addEventListener("click", function(){
+         const quantity =changeQuantity('caseQuantity' , false, true);
+         setTotalPrice('casePrice','iphoneTotalPrice',59,quantity);
+      });
 
        function totalPhonePrice (id , price, quantity){
          document.getElementById(id).innerText = price * quantity;
@@ -140,36 +137,40 @@
 
         function subtotal (id, price){
          const tempPrice = document.getElementById(id).innerText;
-         const priceNumber = parseFloat(tempPrice);
+         const priceNumber = parseInt(tempPrice);
          const text =0;
          const subtotal = priceNumber + price;
          document.getElementById('subtotal').innerText = subtotal;
          document.getElementById('totalPrice').innerText = subtotal + text;
        }
-       
-       
-         const inputValue=document.getElementById('firstQuantity');
+
+         const inputValue=document.getElementById('phoneQuantity');
          inputValue.addEventListener("keyup", function(){
-         addQuantity('firstQuantity');
-         const quantity =minusQuantity('firstQuantity')
-         if (quantity>=0){
-            price =totalPhonePrice('iphonePrice',1219,quantity);
-            subtotal('casePrice',price);
-         }
-            });
+         const quantity =changeQuantity('phoneQuantity' , false,false);
+         setTotalPrice('iphoneTotalPrice','casePrice',1219,quantity);
+         });
 
-         const inputValue2=document.getElementById('secondQuantity');
+         const inputValue2=document.getElementById('caseQuantity');
          inputValue2.addEventListener("keyup", function(){
-         addQuantity('secondQuantity');
-         const quantity =minusQuantity('secondQuantity')
-         if (quantity>=0){
-            price =totalPhonePrice('casePrice',59,quantity);
-            subtotal('iphonePrice',price);
-         }
-            });
+         const quantity =changeQuantity('caseQuantity' , false,false);
+         setTotalPrice('casePrice','iphoneTotalPrice',59,quantity);
+         });
 
+//  function addQuantity(id){ 
+   //    const value = document.getElementById(id).value;
+   //    const valueNumber = parseInt(value);
+   //    const finalNumber = valueNumber+1;
+   //    document.getElementById(id).value = finalNumber;;
+   //    return finalNumber;
+   //  }
+
+   //  function minusQuantity(id){ 
+   //    const value = document.getElementById(id).value;
+   //    const valueNumber = parseInt(value);
+   //    const finalNumber = valueNumber-1;
+   //    document.getElementById(id).value = finalNumber;;
+   //    return finalNumber;
+   //  }       
    </script>
-
-
 </body>
 </html>
